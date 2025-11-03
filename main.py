@@ -63,7 +63,6 @@ target_prim_paths: list[str] = [
     f"{scene_prim_path}/stand0/target",
     f"{scene_prim_path}/tote2/target",
     f"{scene_prim_path}/tote1/target",
-    f"{scene_prim_path}/tote3/target",
     f"{scene_prim_path}/conv/target"
 ]
 
