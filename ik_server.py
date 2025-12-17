@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -61,10 +62,12 @@ class PyRoKiPlanner:
 
 project_root = Path(__file__).parent
 robot_library = project_root / "robots/library"
-
-robot_urdf_path = robot_library / "ABB/CRB15000_10kg_152_v1/CRB15000_10kg_152.urdf" 
-assert robot_urdf_path.exists(), f"{robot_urdf_path} not exist"
-planner = PyRoKiPlanner(robot_urdf_path, "flange")
+# ROGER_ROBOT_URDF = os.environ.get("ROGER_ROBOT_URDF", "ABB/CRB15000_10kg_152_v1/CRB15000_10kg_152.urdf")
+ROGER_ROBOT_URDF = os.environ.get("ROGER_ROBOT_URDF", "ABB/CRB15000_12kg_127_v1/CRB15000_12kg_127.urdf")
+# ROGER_ROBOT_URDF = os.environ.get("ROGER_ROBOT_URDF", "ABB/IRB1200_5_90_STD_v1/IRB1200_5_90_STD.urdf")
+robot_urdf_path = robot_library / ROGER_ROBOT_URDF
+assert robot_urdf_path.exists(), f"{robot_urdf_path} does not exist"
+planner = PyRoKiPlanner(robot_urdf_path, "tool0")
 
 
 class JointAnglesRequest(BaseModel):
@@ -92,7 +95,6 @@ app = FastAPI()
 @app.get("/")
 def home():
     return {"message": "IK/FK Server"}
-
 
 @app.post("/ik")
 def ik_route(request: PoseRequest):
